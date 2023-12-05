@@ -1,0 +1,20 @@
+name: Hello World Action
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Print Hello World
+      run: echo Hello, world from repo 1!
+    
+    - uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.REPO_DISPATCH_TOKEN }}
+        repository: abdullahfarook/GithubActionsRepo2
+        event-type: test-event
+        client-payload: '{"branch": "main"}'
+  

@@ -1,0 +1,60 @@
+name: Self-Hosted Runner Build
+
+# To get this to run succesfully it is likely you will need to undertake a few extra steps
+# - Change which user is executing the windows service.. Setting to Administrator works
+# - In git config file (which is here (C:\Program Files\Git\etc\gitconfig) made 2 modifications:
+#     - Added this section at the end
+#       [safe]
+#       directory = C:/inetpub/LIVE WEBSITES/TM-2.0-Website-UpWork-Dev1
+#     - in core section added this extra line
+#      	longpaths = true
+
+
+on:
+  push:
+    branches:
+      - play-wright-testing
+
+jobs:
+  build-and-refresh:
+    runs-on: [self-hosted, windows, x64]
+    defaults:
+      run:
+        working-directory: C:\inetpub\LIVE WEBSITES\TM-2.0-Website-UpWork-Dev1
+        
+    steps:
+
+    - name: Stash local changes
+      run: |
+        git stash
+
+      
+    - name: Pull code from the remote repository
+      run: |
+        git pull origin play-wright-testing
+
+      
+    - name: Apply stashed changes
+      run: |
+        git stash pop
+
+
+    - name: Run npm install
+      run: npm install
+
+
+    - name: Run Gulp Build (without export)
+      run: gulp buildnoexport
+
+   # In theory this is not needed as its included in gulpfile.js recyleAppPoolCommand, but it doesnt seem to be 100% reliable, so we do it again.
+    - name: Refresh IIS App Pool
+      run: |
+        c:\windows\system32\inetsrv\appcmd.exe recycle apppool /apppool.name:'PlaywrightTesting'
+      
+  RunAllTests:
+    needs: build-and-refresh
+    uses: IllusionVK/PlaywrightTesting/.github/workflows/test.yml@main   
+
+
+
+

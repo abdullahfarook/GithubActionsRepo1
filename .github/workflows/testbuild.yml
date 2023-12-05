@@ -15,5 +15,5 @@ jobs:
       with:
         token: ${{ secrets.PAT }}
         repository: abdullahfarook/GithubActionsRepo2
-        event-type: test-event
+        event-type: run-tests
         client-payload: '{"branch": "main"}'

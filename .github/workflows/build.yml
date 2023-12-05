@@ -9,7 +9,6 @@ name: Self-Hosted Runner Build
 #     - in core section added this extra line
 #      	longpaths = true
 
-
 on:
   push:
     branches:

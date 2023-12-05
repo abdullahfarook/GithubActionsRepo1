@@ -1,4 +1,4 @@
-name: Hello World Action
+name: Dispatch event action
 
 on: [push]
 

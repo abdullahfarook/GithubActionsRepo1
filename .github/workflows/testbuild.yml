@@ -13,7 +13,7 @@ jobs:
     
     - uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
         repository: abdullahfarook/GithubActionsRepo2
         event-type: test-event
         client-payload: '{"branch": "main"}'

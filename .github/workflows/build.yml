@@ -50,10 +50,14 @@ jobs:
     - name: Refresh IIS App Pool
       run: |
         c:\windows\system32\inetsrv\appcmd.exe recycle apppool /apppool.name:'PlaywrightTesting'
-      
-  RunAllTests:
-    needs: build-and-refresh
-    uses: IllusionVK/PlaywrightTesting/.github/workflows/test.yml@main   
+
+    - name: dispatch run-tests workflow
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PAT }}
+        repository: IllusionVK/PlaywrightTesting
+        event-type: run-tests
+        client-payload: '{"branch": "main"}'
 
 
 
